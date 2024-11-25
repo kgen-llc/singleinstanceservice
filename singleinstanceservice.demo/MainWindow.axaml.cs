@@ -12,6 +12,6 @@ public partial class MainWindow : Window
 
     public void RestartHandler(object sender, RoutedEventArgs args)
     {
-        ((App)Avalonia.Application.Current!).SingleInstanceManager!.Restart();
+        App.SingleInstanceManager!.Restart();
     }
 }

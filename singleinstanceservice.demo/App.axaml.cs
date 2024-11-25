@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 
 namespace singleinstanceservice.demo;
 
@@ -14,17 +15,28 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         
-        SingleInstanceManager = new ();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();
-            SingleInstanceManager.ShutdownRequested +=
-            (_, __) => desktop.Shutdown();
+            if(SingleInstanceManager != null)
+            {
+                SingleInstanceManager.ShutdownRequested +=
+                (_, __) => desktop.Shutdown();
+                SingleInstanceManager.NewInstanceRequested +=
+                (_, __) => {
+                    
+                    Dispatcher.UIThread.Invoke(() => 
+                    {
+                        var newWindow = new MainWindow();
+                        newWindow.Title += $":{desktop.Windows.Count}";
+                        newWindow.Show();
+                    });
+                };
+            }
         }
-
         base.OnFrameworkInitializationCompleted();
 
     }
 
-    public SingleInstanceManager? SingleInstanceManager {get; private set;}
+    public static SingleInstanceManager? SingleInstanceManager {get; set;}
 }

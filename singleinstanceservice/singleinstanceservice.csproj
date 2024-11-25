@@ -17,9 +17,11 @@
     <Product>KGen Single Instance Service</Product>
     <Copyright>Copyright 2024 KGEN LLC</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
-  </PropertyGroup>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+</PropertyGroup>
 
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="\"/>
+    <None Include="../LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>
 </Project>

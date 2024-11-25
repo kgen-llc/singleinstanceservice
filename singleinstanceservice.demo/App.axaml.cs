@@ -7,6 +7,8 @@ namespace singleinstanceservice.demo;
 
 public partial class App : Application
 {
+    public static SingleInstanceManager? SingleInstanceManager {get; set;}
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -38,5 +40,4 @@ public partial class App : Application
 
     }
 
-    public static SingleInstanceManager? SingleInstanceManager {get; set;}
 }

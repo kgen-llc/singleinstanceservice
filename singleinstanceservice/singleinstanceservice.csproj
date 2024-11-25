@@ -4,6 +4,22 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>Latest</LangVersion>
+    <Version>0.5.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageId>kgen.$(AssemblyName)</PackageId>
+    <Title>KGen Single Instance Service</Title>
+    <Company>KGen LLC</Company>
+    <Authors>Frederic Forjan</Authors>
+    <PackageProjectUrl>https://github.com/kgen-llc/singleinstanceservice</PackageProjectUrl>
+    <AnalysisLevel>latest-all</AnalysisLevel>
+    <Description>Small service to allow single instance application and lifetime management.</Description>
+    <Product>KGen Single Instance Service</Product>
+    <Copyright>Copyright 2024 KGEN LLC</Copyright>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>Latest</LangVersion>
-    <Version>0.5.0</Version>
+    <Version>0.6.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageId>kgen.$(AssemblyName)</PackageId>
@@ -23,5 +23,7 @@
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="\"/>
     <None Include="../LICENSE" Pack="true" PackagePath=""/>
+
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0" />
   </ItemGroup>
 </Project>

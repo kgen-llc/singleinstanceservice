@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace singleinstanceservice;
 
@@ -7,13 +8,14 @@ public class SingleInstanceManager
 {
     private Mutex serviceInstanceMutex;
     private Menelabs.FileSystemSafeWatcher watcher;
+    private readonly ILogger logger;
 
     public event EventHandler ShutdownRequested;
 
-    public event EventHandler<string[]> NewInstanceRequested;
+    public event EventHandler<NewInstanceRequestEventArgs> NewInstanceRequested;
 
 
-    public SingleInstanceManager(string name)
+    public SingleInstanceManager(ILogger logger, string name)
     {
         var id = (name ?? Assembly.GetEntryAssembly().GetName().Name) + ".singleinstancemanager";
         var fileName = "." + id;
@@ -23,11 +25,17 @@ public class SingleInstanceManager
 
         if (Mutex.TryOpenExisting("Global\\" + id, out serviceInstanceMutex))
         {
+#pragma warning disable CA1848 // Use the LoggerMessage delegates
+            logger?.LogInformation("Application running, raising restart");
+#pragma warning restore CA1848 // Use the LoggerMessage delegates
             AlreadyRunning = true;
             File.WriteAllLines(monitoredFile, Environment.GetCommandLineArgs().Skip(1));
         }
         else
         {
+            #pragma warning disable CA1848 // Use the LoggerMessage delegates
+            logger?.LogInformation("First instance, will monitor");
+            #pragma warning restore CA1848 // Use the LoggerMessage delegates
             File.Delete(monitoredFile);
             watcher = new Menelabs.FileSystemSafeWatcher(Path.GetTempPath())
             {
@@ -40,12 +48,17 @@ public class SingleInstanceManager
             AlreadyRunning = false;
             serviceInstanceMutex = new Mutex(true, "Global\\" + id);
         }
+
+        this.logger = logger;
     }
 
     public bool AlreadyRunning { get; private set; }
 
     public void Restart()
     {
+        #pragma warning disable CA1848 // Use the LoggerMessage delegates
+            logger?.LogInformation("Restart requested");
+            #pragma warning restore CA1848 
 
         var restartProcess = new ProcessStartInfo
         {
@@ -65,6 +78,9 @@ public class SingleInstanceManager
     }
     public void Shutdown()
     {
+        #pragma warning disable CA1848 // Use the LoggerMessage delegates
+            logger?.LogInformation("Shutdown requested");
+            #pragma warning restore CA1848 
         watcher.Dispose();
         ShutdownRequested?.Invoke(this, EventArgs.Empty);
     }
@@ -73,7 +89,11 @@ public class SingleInstanceManager
     {
         if (File.Exists(e.FullPath))
         {
-            this.NewInstanceRequested?.Invoke(this, File.ReadAllLines(e.FullPath));
+            #pragma warning disable CA1848 // Use the LoggerMessage delegates
+            #pragma warning restore CA1848 
+            this.NewInstanceRequested?.Invoke(
+                this, 
+                new NewInstanceRequestEventArgs(File.ReadAllLines(e.FullPath)));
             File.Delete(e.FullPath);
         }
     }

@@ -10,7 +10,7 @@ class Program
     // yet and stuff might break.
     [STAThread]
     public static void Main(string[] args)  {
-        App.SingleInstanceManager = new (null);
+        App.SingleInstanceManager = new (null, null);
         if(!App.SingleInstanceManager.AlreadyRunning)
         {
             BuildAvaloniaApp()

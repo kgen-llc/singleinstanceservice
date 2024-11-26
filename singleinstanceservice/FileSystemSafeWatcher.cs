@@ -21,7 +21,7 @@ namespace Menelabs
     /// cause some events not be fired at all since the last event will become the first event and
     /// it won't fire a if a new similar event arrives imediately afterwards).
     /// </summary>
-    public class FileSystemSafeWatcher : IDisposable
+    public sealed class FileSystemSafeWatcher : IDisposable
     {
         private readonly FileSystemWatcher _fileSystemWatcher;
 
@@ -230,50 +230,45 @@ namespace Menelabs
         /// Raises the System.IO.FileSystemWatcher.Changed event.
         /// </summary>
         /// <param name="e">A System.IO.FileSystemEventArgs that contains the event data.</param>
-        protected void OnChanged(FileSystemEventArgs e)
+        private void OnChanged(FileSystemEventArgs e)
         {
-            if (Changed != null)
-                Changed(this, e);
+            Changed?.Invoke(this, e);
         }
         
         /// <summary>
         /// Raises the System.IO.FileSystemWatcher.Created event.
         /// </summary>
         /// <param name="e">A System.IO.FileSystemEventArgs that contains the event data.</param>
-        protected void OnCreated(FileSystemEventArgs e)
+        private void OnCreated(FileSystemEventArgs e)
         {
-            if (Created != null)
-                Created(this, e);
+            Created?.Invoke(this, e);
         }
         
         /// <summary>
         /// Raises the System.IO.FileSystemWatcher.Deleted event.
         /// </summary>
         /// <param name="e">A System.IO.FileSystemEventArgs that contains the event data.</param>
-        protected void OnDeleted(FileSystemEventArgs e)
+        private void OnDeleted(FileSystemEventArgs e)
         {
-            if (Deleted != null)
-                Deleted(this, e);
+            Deleted?.Invoke(this, e);
         }
         
         /// <summary>
         /// Raises the System.IO.FileSystemWatcher.Error event.
         /// </summary>
         /// <param name="e">An System.IO.ErrorEventArgs that contains the event data.</param>
-        protected void OnError(ErrorEventArgs e)
+        private void OnError(ErrorEventArgs e)
         {
-            if (Error != null)
-                Error(this, e);
+            Error?.Invoke(this, e);
         }
         
         /// <summary>
         /// Raises the System.IO.FileSystemWatcher.Renamed event.
         /// </summary>
         /// <param name="e">A System.IO.RenamedEventArgs that contains the event data.</param>
-        protected void OnRenamed(RenamedEventArgs e)
+        private void OnRenamed(RenamedEventArgs e)
         {
-            if (Renamed != null)
-                Renamed(this, e);
+            Renamed?.Invoke(this, e);
         }
         
         /// <summary>
@@ -436,7 +431,7 @@ namespace Menelabs
             }
         }
 
-        protected void RaiseEvents(Queue deQueue)
+        private void RaiseEvents(Queue deQueue)
         {
             if ((deQueue != null) && (deQueue.Count > 0))
             {

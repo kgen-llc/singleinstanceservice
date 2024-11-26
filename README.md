@@ -56,23 +56,22 @@ public partial class App : Application
     }
 
 }
+```
 
 Notice the subscription on the ShutdownRequested and NewInstanceRequested.
 
-```
 Modify the program as such :
 ```csharp
-[STAThread]
-    public static void Main(string[] args)  {
-        App.SingleInstanceManager = new (null);
-        if(!App.SingleInstanceManager.AlreadyRunning)
-        {
-            BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
-        }
+[STAThread] 
+public static void Main(string[] args)  {
+    App.SingleInstanceManager = new (null, null);
+    if(!App.SingleInstanceManager.AlreadyRunning)
+    {
+        BuildAvaloniaApp()
+        .StartWithClassicDesktopLifetime(args);
     }
+}
 ```
-
 you can then for a button add the following handler :
 ```csharp
  public void RestartHandler(object sender, RoutedEventArgs args)
